@@ -126,8 +126,8 @@ dependencies {
 	implementation 'com.itextpdf:itext7-core:7.2.3'
 	implementation 'com.itextpdf:html2pdf:4.0.3'
 
-    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.10.7'
-    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.10.7'
+    runtime group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.10.7'
+    runtime group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.10.7'
 	
 	testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 	implementation group: 'org.springframework.ldap', name: 'spring-ldap-core', version: '2.3.8.RELEASE'
@@ -170,23 +170,23 @@ jib {
     extraDirectories {
         paths {
             path {
-                from = file('src/build/libs/*.war')
+                from = file('/src/build/libs/*.war')
                 into = '/app/FOSSLight.war'
             }
             path {
-                from = file('verify/verify')
+                from = file('/verify/verify')
                 into = '/app/verify/verify'
             }
             path {
-                from = file('db/wait-for')
+                from = file('/db/wait-for')
                 into = '/app/wait-for'
             }
             path {
-                from = file('LICENSES')
+                from = file('/LICENSES')
                 into = '/app/LICENSES'
             }
             path {
-                from = file('src/main/resources/template')
+                from = file('/src/main/resources/template')
                 into = '/app/template'
             }
         }
