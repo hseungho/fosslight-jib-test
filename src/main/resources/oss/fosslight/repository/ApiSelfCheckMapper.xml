@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="oss.fosslight.repository.ApiSelfCheckMapper">
+	<insert id="createSelfCheck" parameterType="hashMap" useGeneratedKeys="true" keyProperty="prjId">
+		INSERT INTO	PRE_PROJECT_MASTER (
+			  PRJ_NAME
+			, PRJ_VERSION
+			, CREATOR
+			, MODIFIER
+			, DIVISION
+		) VALUES (
+			  #{prjName}
+			, #{prjVersion}
+			, #{loginUserName}
+			, #{loginUserName}
+			, (SELECT DIVISION FROM T2_USERS WHERE USER_ID = #{loginUserName})
+		)
+	</insert>
+	
+	<select id="getCreateProjectCnt" parameterType="String" resultType="int">
+		SELECT COUNT(1) 
+		  FROM PRE_PROJECT_MASTER 
+		 WHERE CREATOR = #{userId}
+		   AND DATE_FORMAT(CREATED_DATE, '%Y%m%d') = DATE_FORMAT(NOW(), '%Y%m%d')
+		   AND USE_YN = 'Y'
+	</select>
+	
+	<select id="selectProjectCount" parameterType="hashMap" resultType="int">
+		/* SelfCheckMapper.selectProjectCount */
+		SELECT COUNT(*) 
+		  FROM (SELECT T1.PRJ_ID
+					 , T1.PRJ_NAME
+					 , T1.PRJ_VERSION
+					 , T1.DISTRIBUTION_TYPE
+					 , T1.COMMENT
+					 , T1.OS_TYPE
+					 , T1.OS_TYPE_ETC
+					 , IFNULL(T1.SRC_CSV_FILE_ID, '') SRC_CSV_FILE_ID
+					 , T1.DIVISION
+					 , IFNULL((SELECT USER_NAME FROM T2_USERS WHERE T1.CREATOR  = USER_ID), T1.CREATOR) AS CREATOR
+					 , T1.CREATED_DATE
+					 , IFNULL((SELECT USER_NAME FROM T2_USERS WHERE T1.MODIFIER  = USER_ID), T1.MODIFIER) AS MODIFIER
+					 , T1.MODIFIED_DATE
+					 , IFNULL(T1.CVSS_SCORE, 0) AS CVSS_SCORE
+					 , T1.CVE_ID
+				  FROM PRE_PROJECT_MASTER T1
+   				  LEFT OUTER JOIN (SELECT A1.REFERENCE_ID
+										, MAX(A2.CVSS_SCORE) AS CVSS_SCORE
+								 		, 'Y' AS VULN_YN
+									 FROM PRE_OSS_COMPONENTS A1
+						  			INNER JOIN OSS_MASTER A2 
+						    		   ON A1.OSS_NAME = A2.OSS_NAME
+						    		  AND A1.OSS_VERSION = A2.OSS_VERSION 
+						    		  AND A2.VULN_YN = 'Y'
+									WHERE A1.REFERENCE_DIV IN ('10','11','12','14','15') AND A1.EXCLUDE_YN = 'N'
+						    		GROUP BY REFERENCE_ID) T2 ON T1.PRJ_ID = T2.REFERENCE_ID
+	    		 WHERE T1.USE_YN = 'Y'
+	    		 <if test="@oss.fosslight.util.StringUtil@notEquals('ROLE_ADMIN', userRole)">
+			       AND (T1.CREATOR = #{userId} 
+							OR EXISTS (SELECT A1.PRJ_ID, A1.DIVISION
+										 FROM PRE_PROJECT_WATCHER A1 
+										<!-- INNER JOIN T2_USERS A2 ON A2.USE_YN = 'Y' AND A2.USER_ID = #{userId} -->
+										WHERE A1.PRJ_ID = T1.PRJ_ID AND (A1.USER_ID = #{userId} OR (A1.USER_ID = 'all' AND A1.DIVISION = (SELECT DIVISION FROM T2_USERS A2 WHERE A2.USER_ID = #{userId}) ))))
+				 </if>
+				   AND T1.PRJ_ID = #{prjId}
+			   ) A
+		 WHERE 1=1
+	</select>
+	
+	<select id="selectProjectMaster" parameterType="String" resultType="oss.fosslight.domain.CamelMap">
+		/* apiSelfCheckMapper.selectProjectMaster */
+		SELECT A.PRJ_ID 
+			, A.PRJ_NAME 
+			, A.PRJ_VERSION 
+			, A.DISTRIBUTION_TYPE 
+			, CASE WHEN B.CONTENTS IS NULL THEN A.COMMENT ELSE B.CONTENTS END AS COMMENT
+			, B.COMM_ID AS COMMENT_IDX
+			, A.OS_TYPE
+			, A.OS_TYPE_ETC 
+			, A.USE_YN 
+			
+			/** FILE_ID **/
+			, A.SRC_CSV_FILE_ID
+			, A.CREATOR 
+			, A.CREATED_DATE
+			, A.MODIFIER 
+			, A.MODIFIED_DATE 
+            , (SELECT USER_NAME FROM T2_USERS WHERE USER_ID = A.CREATOR) AS PRJ_USER_NAME
+            , (SELECT CD_DTL_NM FROM T2_CODE_DTL WHERE CD_NO = '200' AND CD_DTL_NO = A.DIVISION) AS PRJ_DIVISION_NAME
+		FROM
+			PRE_PROJECT_MASTER A 
+			LEFT JOIN COMMENTS_HISTORY B ON A.COMMENT = B.COMM_ID
+		 WHERE A.PRJ_ID = #{prjId}
+	</select>
+	
+	<select id="existsWatcherByEmail" parameterType="string" resultType="int">
+		SELECT COUNT(1) 
+		FROM PRE_PROJECT_WATCHER WAT
+		LEFT JOIN T2_USERS USR
+		ON WAT.USER_ID = USR.USER_ID
+		AND USR.USE_YN = 'Y'
+		WHERE WAT.PRJ_ID = #{prjId}
+		AND (WAT.EMAIL = #{email} OR USR.EMAIL = #{email})
+	</select>
+	
+	<insert id="insertWatcher" parameterType="hashMap">
+		INSERT INTO PRE_PROJECT_WATCHER (PRJ_ID, DIVISION, USER_ID, EMAIL) VALUES (#{prjId}, #{division}, #{userId}, #{email})
+	</insert>
+</mapper>

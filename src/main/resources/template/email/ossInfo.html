@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/strict.dtd">
+<html lang="ko">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<style>
+			.marker{background-color: Yellow;}
+		</style>
+		<title>FOSSLight Hub</title>
+	</head>
+	<body>
+		<table cellspacing="0" cellpadding="0" border="0" style="font-family:'arial,sans-serif'">
+			<tr>
+				<td colspan="3" height="28" style="background:#f9f9f9"></td>
+			</tr>
+			<tr>
+				<td width="60" style="background:#f9f9f9"></td>
+				<td>
+					<table cellspacing="0" cellpadding="0" border="0">
+						<tr>
+							<td colspan="3" height="25" style="background:#c00c3f">
+								<h1 style="margin:0;padding-left:5px;font-size:14px;color:white">FOSSLight Hub Notification</h1>
+							</td>
+						</tr>
+						<tr>
+							<td width="1" style="background:#ddd"></td>
+							<td style="padding:40px;">
+							#if( $contentsTitle )
+								<div style="padding-bottom:10px;font-size:16px;font-weight:bold;">$!contentsTitle</div>
+							#end
+							#if( $contentsSubTitle )
+								<p style="font-size:12px;">$!contentsSubTitle</p>
+							#end
+								#if($comment && $comment != "" && ($mailType == "19" || $mailType == "10" || $mailType == "13"))
+									<h2 style="margin:0;padding:25px 10px 0;font-size:16px;">Comment</h2>
+									<div style="padding:10px;font-size:12px;">$!comment</div>
+								#end
+								<table cellspacing="0" cellpadding="0" width="100%" border="1" style="font-size:12px;border-color:#ddd;">
+									<col style="width:40%">
+        							<col style="width:*">
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">&nbsp;</th>
+										<th style="padding:5px;background:#f0f0f0;">Registered Data</th>
+									</tr>
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">OSS Name</th>
+										<td style="padding:5px;">$!oss_basic_info.ossName</td>
+									</tr>
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">Nickname</th>
+										<td style="padding:5px;">$!oss_basic_info.ossNickname</td>
+									</tr>
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">OSS Version</th>
+										<td style="padding:5px;">$!oss_basic_info.ossVersion #if($!oss_basic_info.ossVersion != '') #end 
+										#if($oss_basic_info.ossType.contains("M")) <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAARCAIAAABfOGuuAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADcSURBVDhPY/z//39v39o7d58zEAdUlCWLi4JZgCygHg1NK4goQXDj+jEgyQThkApQtP3+/evTp7fv3j0DkkA2GheqCAxAjoSD798/11a5QtjNbbuBJDKXlVUYwgYCFNv+/PkJZTEwAC0BIigHVQoIcPqtvyceiKAcDECNIIGDlLQ+NAYawK6Nlw/qezgDDWDXxsnJCww6IAIyoEKoAEUbCws7hAFUzccnDERwbXApCECJN4glEAYuEQhAsY2VlQ1iCZCBSwQCsPuNICA54ygrSZYUB4O0QQWIBwwMAJhcWykW5ke4AAAAAElFTkSuQmCC"/> #end
+										#if($oss_basic_info.ossType.contains("D")) <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAARCAIAAABfOGuuAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD6SURBVDhPY/z///+WnpUv7zxlIA6Iq0j7lISzAFlAPYaa+hBRguD89YtAkgnCIRWgaPv1+9fbT++evXsBQUA2UAQqhwpAjoSDz9+/uNaGQjlgsK5qgZSQOBsrG5QPAyi2/fwDNXth4ZTlZbOAjKC2hGfvXmLaid1vwnyCimKycJ1AV0DE4QBnkAAdxsvJDWHDXQEH1AhJZAD0z+fvXyFsdha8QQIHbz+9v//qcWRXGpANDExeTh6IOBygRADc1Pj+HAgDVwSgaAOaurt5NTwAgKZg1QMEKI4EqhDmE5ISkoAgIBurHiAgMyRJzzjKUj6lESBtUAHiAQMDAJyXY/B57xmtAAAAAElFTkSuQmCC"/> #end
+										#if($oss_basic_info.ossType.contains("V")) <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAARCAIAAABfOGuuAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADZSURBVDhPY/z///+GWY3PH95kIA5IyqsHpNWzAFlAPYE29hBRgmD9kYNAkgnCIRWga/v56/er95+ACMhAZkOlYQBd28ev3/WiSoEIyEBmQ6VhAIttcAYyG8KAA3Rt7GysEAbEeRA2XBAO0LXxc3PunVoDZHgXdgARkAHkAgXBkgiAxTY+bi4oBwyAXMK2AQGaIkw9QIBFG9ydQIDVhUCA3TZRQX4IG8gg1jYgANpwaVk3EGG1CgiwawPaICbIB0RYrQIC7NoIApIzjoS8WmBaA0gbVIB4wMAAAOuvYrotinxoAAAAAElFTkSuQmCC"/> #end
+										</td>
+									</tr>
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">Declared License Name (Type)</th>
+										<td style="padding:5px;">$!oss_basic_info.licenseName ($!oss_basic_info.licenseType)</td>
+									</tr>
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">Detected License Name</th>
+										<td style="padding:5px;">
+										#foreach( $detectedLicense in $!oss_basic_info.detectedLicenses )
+											$!detectedLicense#if( $foreach.hasNext ), #end
+										#end
+										</td>
+									</tr>
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">Obligation</th>
+										<td style="padding:5px;">$!oss_basic_info.obligation</td>
+									</tr>
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">Copyright</th>
+										<td style="padding:5px;">$!oss_basic_info.copyright</td>
+									</tr>
+									#if($oss_basic_info.ossType.contains("M") || $oss_basic_info.ossType.contains("D"))
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">License Copyright</th>
+										<td>
+											<table cellspacing="3" cellpadding="0" width="100%" border="1" style="font-size:12px;border-color:#ddd;">
+											#foreach( $ossLicense in $oss_basic_info.ossLicenses )
+												<tr>
+													<td>$!ossLicense.ossLicenseComb</td>
+													<td>$!ossLicense.licenseName</td>
+													<td>$!ossLicense.ossCopyright</td>
+												</tr>
+											#end
+											</table>
+										</td>
+									</tr>
+									#end
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">Homepage</th>
+										<td style="padding:5px;">#if($!{oss_basic_info.homepage} != "")<a href="$!oss_basic_info.homepage" target="_blank">$!oss_basic_info.homepage</a>#end</td>
+									</tr>
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">Download Location</th>
+										<td style="padding:5px;">#if($!{oss_basic_info.downloadLocation} != "")$!oss_basic_info.downloadLocation#end</td>
+									</tr>
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">Summary Description</th>
+										<td style="padding:5px;">$!oss_basic_info.summaryDescription</td>
+									</tr>
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">Attribution</th>
+										<td style="padding:5px;">$!oss_basic_info.attribution</td>
+									</tr>
+									<tr>
+										<th align="left" style="padding:5px;background:#f0f0f0;">Created Date / Creator</th>
+										<td style="padding:5px;">$!oss_basic_info.createdDate / $!oss_basic_info.creator</td>
+									</tr>
+								</table>
+								#if($comment && $comment != "" && $mailType != "19" && $mailType != "10" && $mailType != "13")
+									<h2 style="margin:0;padding:25px 10px 0;font-size:16px;">Comment</h2>
+									<div style="padding:10px;font-size:12px;">$!comment</div>
+								#end
+								
+								#if( $projectList )
+									<br />
+									<h2 style="margin:20px 0 0;padding:10px;font-size:16px;">&laquo; Project List &raquo;</h2>
+									<table cellspacing="0" cellpadding="0" width="100%" border="1" style="font-size:12px;border-color:#ddd;">
+										<tr>
+											<th style="padding:5px;background:#f0f0f0;">ID</th>
+											<th style="padding:5px;background:#f0f0f0;">Project Name</th>
+											<th style="padding:5px;background:#f0f0f0;">Project Version</th>
+											<th style="padding:5px;background:#f0f0f0;">Distribution Type</th>
+											<th style="padding:5px;background:#f0f0f0;">Creator</th>
+											<th style="padding:5px;background:#f0f0f0;">Created Date</th>
+											<th style="padding:5px;background:#f0f0f0;">Reviewer</th>
+										</tr>
+										#foreach( $project in $projectList )
+										<tr>
+											<td style="padding:5px;">$!project.prjId</td>
+											<td style="padding:5px;">$!project.prjName</td>
+											<td style="padding:5px;">$!project.prjVersion</td>
+											<td style="padding:5px;">$!project.distributionType</td>
+											<td style="padding:5px;">$!project.creator</td>
+											<td style="padding:5px;">$!project.createdDate</td>
+											<td style="padding:5px;">$!project.reviewer</td>
+										</tr>
+										#end
+									</table>
+								#end
+								
+								<div style="margin:20px 0;border:1px dashed #666;"></div>
+								#set($shortDomain = $domain.replaceAll("(http|https)://", ""))
+								<div style="font-size:12px;">* This mail was sent by <a href="$domain" target="_blank">$shortDomain</a></div>
+							</td>
+							<td width="1" style="background:#ddd"></td>
+						</tr>
+						<tr>
+							<td colspan="3" height="1" style="background:#ddd"></td>
+						</tr>
+					</table>
+				</td>
+				<td width="60" style="background:#f9f9f9"></td>
+			</tr>
+			<tr>
+				<td colspan="3" height="28" style="background:#f9f9f9"></td>
+			</tr>
+		</table>
+		
+	</body>
+</html>
