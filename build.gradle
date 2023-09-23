@@ -170,23 +170,23 @@ jib {
     extraDirectories {
         paths {
             path {
-                from = file('./build/libs/*.war')
+                from = file('src/build/libs/*.war')
                 into = '/app/FOSSLight.war'
             }
             path {
-                from = file('./verify/verify')
+                from = file('verify/verify')
                 into = '/app/verify/verify'
             }
             path {
-                from = file('./db/wait-for')
+                from = file('db/wait-for')
                 into = '/app/wait-for'
             }
             path {
-                from = file('./LICENSES')
+                from = file('LICENSES')
                 into = '/app/LICENSES'
             }
             path {
-                from = file('./src/main/resources/template')
+                from = file('src/main/resources/template')
                 into = '/app/template'
             }
         }
